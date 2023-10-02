@@ -26,6 +26,13 @@ let goBack = true;
 
 //Funcion principal
 function main() {
+  selectedMethod = null;
+  numAmount = null;
+  numbersToSort = null;
+  sortedNums = null;
+  showNumbersAnswer = null;
+  goInitialMenuAnswer = null;
+
   selectedMethod = optionsFunct(
     selectMethodCompleteMsg,
     genericErrorMsg,
@@ -65,7 +72,7 @@ function main() {
   switch (selectedMethod) {
     case "1":
       timeStart = new Date();
-      numbersToSort.slice().sort((a, b) => a - b);
+      sortedNums = numbersToSort.slice().sort((a, b) => a - b);
       timeFinish = new Date();
       time = (timeFinish - timeStart) / 1000;
       break;
@@ -78,9 +85,17 @@ function main() {
       break;
 
     case "3":
+      timeStart = new Date();
+      sortedNums = insertionSort(numbersToSort);
+      timeFinish = new Date();
+      time = (timeFinish - timeStart) / 1000;
       break;
 
     case "4":
+      timeStart = new Date();
+      sortedNums = selectionSort(numbersToSort);
+      timeFinish = new Date();
+      time = (timeFinish - timeStart) / 1000;
       break;
 
     default:
@@ -114,7 +129,7 @@ function main() {
   } while (!answerIsValid);
 
   if (showNumbersAnswer === "1") {
-    for (const iterator of sortedNums) {
+    for (let iterator of sortedNums) {
       console.log(iterator);
     }
   }
@@ -180,20 +195,55 @@ function randomNums(numAmount) {
 }
 
 function bubbleSort(numbers) {
-  let sortedNums = numbers;
   let aux;
 
-  for (let i = 0; i < sortedNums.length; i++) {
-    for (let j = 0; j < sortedNums.length; j++) {
-      if (sortedNums[j] > sortedNums[j + 1]) {
-        aux = sortedNums[j];
-        sortedNums[j] = sortedNums[j + 1];
-        sortedNums[j + 1] = aux;
+  for (let i = 0; i < numbers.length - 1; i++) {
+    for (let j = 0; j < numbers.length - 1; j++) {
+      if (numbers[j] > numbers[j + 1]) {
+        aux = numbers[j];
+        numbers[j] = numbers[j + 1];
+        numbers[j + 1] = aux;
       }
     }
   }
 
-  return sortedNums;
+  return numbers;
+}
+
+function insertionSort(numbers) {
+  let aux;
+  let j;
+
+  for (let i = 1; i < numbers.length; i++) {
+    aux = numbers[i];
+    j = i - 1;
+    while (j >= 0 && numbers[j] > aux) {
+      numbers[j + 1] = numbers[j];
+      j = j - 1;
+    }
+    numbers[j + 1] = aux;
+  }
+  return numbers;
+}
+
+function selectionSort(numbers) {
+  let aux;
+  let min;
+
+  for (let i = 0; i < numbers.length - 1; i++) {
+    min = i;
+    for (let j = i + 1; j < numbers.length; j++) {
+      if (numbers[j] < numbers[min]) {
+        min = j;
+      }
+    }
+    if (min !== i) {
+      aux = numbers[i];
+      numbers[i] = numbers[min];
+      numbers[min] = aux;
+    }
+  }
+  return numbers;
 }
 
 while (goBack) {
